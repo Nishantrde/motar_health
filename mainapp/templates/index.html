@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Motor Health</title>
+</head>
+<body>
+
+  <input id="healthInput" type="text" placeholder="Enter data…">
+  <button id="sendBtn">Send</button>
+
+  <script>
+    // 1) Grab CSRF token from cookie (Django’s default)
+    function getCookie(name) {
+      const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith(name + '='));
+      return cookieValue ? decodeURIComponent(cookieValue.split('=')[1]) : null;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // 2) Wire up the button
+    document.getElementById('sendBtn').addEventListener('click', async () => {
+      const payload = {
+        text: document.getElementById('healthInput').value
+      };
+
+      try {
+        const res = await fetch('http://127.0.0.1:8000/RC_info', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken    // important for Django!
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          throw new Error(`Server error: ${res.status}`);
+        }
+
+        const data = await res.json();
+        console.log('Response from server:', data);
+        // optionally update the UI…
+      } catch (err) {
+        console.error('POST failed:', err);
+      }
+    });
+  </script>
+
+</body>
+</html>
