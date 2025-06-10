@@ -1,107 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-  <style>/* motor_health.css */
-
-/* 1) Base resets & font */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-body {
-  font-family: 'Nunito', sans-serif;
-  background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.8s ease-out;
-}
-
-/* 2) Container */
-.container {
-  padding: 1rem;
-}
-
-/* 3) Card */
-.card {
-  background: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  padding: 2rem;
-  max-width: 360px;
-  width: 100%;
-  text-align: center;
-}
-.card h1 {
-  font-size: 1.75rem;
-  margin-bottom: 0.5rem;
-  color: #1f2937;
-}
-.card p {
-  color: #4b5563;
-  margin-bottom: 1rem;
-}
-
-/* 4) Input group */
-.input-group {
-  display: flex;
-  gap: 0.5rem;
-}
-.input-group input {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border: 2px solid #cbd5e1;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-}
-.input-group input:focus {
-  outline: none;
-  border-color: #3b82f6;
-}
-
-/* 5) Button */
-.input-group button {
-  padding: 0.75rem 1.25rem;
-  background: #3b82f6;
-  color: #fff;
-  font-weight: 600;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-}
-.input-group button:hover {
-  background: #2563eb;
-}
-.input-group button:active {
-  transform: scale(0.97);
-}
-
-/* 6) Response area */
-.response {
-  margin-top: 1rem;
-  font-family: monospace;
-  color: #111827;
-  white-space: pre-wrap;
-  text-align: left;
-}
-
-/* 7) Fade-in on load */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-</style>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Motor Health</title>
   <!-- Nunito from Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- Your custom CSS -->
-  <link rel="stylesheet" href="motor_health.css">
+  <style>
+    /* motor_health.css */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.8s ease-out;
+    }
+    .container {
+      padding: 1rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      padding: 2rem;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+    }
+    .card h1 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+      color: #1f2937;
+    }
+    .card p {
+      color: #4b5563;
+      margin-bottom: 1rem;
+    }
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .input-group input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 2px solid #cbd5e1;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+    .input-group button {
+      padding: 0.75rem 1.25rem;
+      background: #3b82f6;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .input-group button:hover {
+      background: #2563eb;
+    }
+    .input-group button:active {
+      transform: scale(0.97);
+    }
+    .response {
+      margin-top: 1rem;
+      font-family: monospace;
+      color: #111827;
+      white-space: pre-wrap;
+      text-align: left;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -117,7 +102,7 @@ body {
   </div>
 
   <script>
-    // Grab CSRF token from cookie (Django’s default)
+    // 1) Grab CSRF token from cookie (Django’s default)
     function getCookie(name) {
       const cookieValue = document.cookie
         .split('; ')
@@ -126,19 +111,23 @@ body {
     }
     const csrftoken = getCookie('csrftoken');
 
-    // Wire up the button
+    // 2) Compute API URL dynamically
+    const apiUrl = `${window.location.origin}/RC_info`;
+
+    // 3) Attach event listener
     document.getElementById('sendBtn').addEventListener('click', async () => {
       const payload = { text: document.getElementById('healthInput').value };
       const resContainer = document.getElementById('response');
       resContainer.textContent = 'Sending…';
       try {
-        const res = await fetch('http://127.0.0.1:8000/RC_info', {
+        const res = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
+          credentials: 'same-origin'  // ensure cookies (including csrf) are sent
         });
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
         const data = await res.json();
