@@ -38,13 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "corsheaders",
     'mainapp',
     'rest_framework',
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -135,23 +133,3 @@ STATIC_ROOT = BASE_DIR / "staticfiles_build"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CORS_ALLOWED_ORIGINS = [
-  "https://motar-health.vercel.app",
-  "http://127.0.0.1:8000"
-]
-
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://motar-health.vercel.app",
-    "http://127.0.0.1:8000/"
-]
-
-
-# settings.py
-CORS_ALLOW_CREDENTIALS = True
-
-# If you're only serving HTTPS, you can also enforce the cookie to be secure:
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-
