@@ -133,14 +133,3 @@ STATIC_ROOT = BASE_DIR / "staticfiles_build"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://motar-health.vercel.app",
-    "http://127.0.0.1:8000/"
-]
-
-# If you're only serving HTTPS, you can also enforce the cookie to be secure:
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-

@@ -17,7 +17,7 @@ class RC_info(View):
         
         # 2) Call the blocking fetch_carinfo in a threadpool
         carinfo = await sync_to_async(fetch_carinfo)(text)
-        
+        print(carinfo)
         # 3) Return the result
         return JsonResponse({
             "msg": "we got it",
