@@ -6,7 +6,9 @@ from django.views import View
 from .rto import fetch_carinfo
 
 class Index(View):
-    def get(self, request):
+    async def get(self, request):
+        carinfo = await sync_to_async(fetch_carinfo)("JH10BK5078")
+        print(carinfo)
         return render(request, "index.html")
 
 class RC_info(View):
